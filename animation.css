@@ -1,0 +1,93 @@
+/* WikiWiz — ANIMATIONS */
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 10px rgba(0,255,204,0.1); }
+  50% { box-shadow: 0 0 30px rgba(0,255,204,0.3); }
+}
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+@keyframes numberCount {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes xpFlash {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); color: #ffd700; }
+  100% { transform: scale(1); }
+}
+@keyframes slideInRight {
+  from { transform: translateX(100px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+@keyframes borderScan {
+  0% { background-position: 0% 0%; }
+  100% { background-position: 100% 100%; }
+}
+
+.fade-in-up { animation: fadeInUp 0.6s ease both; }
+.fade-in { animation: fadeIn 0.4s ease both; }
+
+.live-dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--green);
+  animation: pulse 1.5s ease infinite;
+  margin-right: 6px;
+}
+
+/* XP Toast */
+.xp-toast {
+  position: fixed; top: 80px; right: 2rem; z-index: 9999;
+  background: rgba(255,215,0,0.15); border: 1px solid rgba(255,215,0,0.4);
+  padding: 0.75rem 1.5rem; border-radius: 2px;
+  font-family: var(--font-mono); font-size: 0.8rem; color: var(--gold);
+  animation: slideInRight 0.4s ease, fadeIn 0.4s ease;
+  pointer-events: none;
+}
+
+/* Badge Unlock Toast */
+.badge-toast {
+  position: fixed; top: 130px; right: 2rem; z-index: 9999;
+  background: var(--bg2); border: 1px solid var(--gold);
+  padding: 1rem 1.5rem; border-radius: 2px;
+  font-family: var(--font-mono); font-size: 0.75rem;
+  animation: slideInRight 0.4s ease;
+  box-shadow: 0 0 30px rgba(255,215,0,0.2);
+}
+.badge-toast-title { color: var(--gold); letter-spacing: 2px; margin-bottom: 0.25rem; }
+.badge-toast-name { font-size: 1rem; color: var(--text); }
+
+/* Chart lines animation */
+.chart-line {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: drawLine 2s ease forwards;
+}
+@keyframes drawLine {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Hover glow on cards */
+.glow-hover { transition: box-shadow 0.3s, transform 0.3s; }
+.glow-hover:hover { box-shadow: 0 0 30px rgba(0,255,204,0.15); transform: translateY(-3px); }
+
+/* Loading spinner */
+.spinner {
+  display: inline-block; width: 20px; height: 20px;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
