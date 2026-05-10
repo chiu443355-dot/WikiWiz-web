@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WikiWiz — The Complete Trading Academy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;900&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/main.css"/>
+  <link rel="stylesheet" href="css/animations.css"/>
+</head>
+<body>
+
+<!-- NOISE OVERLAY -->
+<div class="noise-overlay"></div>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-brand">
+    <span class="nav-logo">⬡</span>
+    <span class="nav-title">APEX<span class="accent">TRADER</span></span>
+  </div>
+  <div class="nav-links">
+    <a href="#markets" class="nav-link">Markets</a>
+    <a href="#learn" class="nav-link">Learn</a>
+    <a href="#calculators" class="nav-link">Calculators</a>
+    <a href="#events" class="nav-link">Market Events</a>
+  </div>
+  <div class="nav-right">
+    <div class="xp-badge" id="navXP">
+      <span class="xp-icon">⚡</span>
+      <span id="xpDisplay">0 XP</span>
+    </div>
+    <div class="rank-badge" id="navRank">🥚 ROOKIE</div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-grid"></div>
+  <div class="hero-content">
+    <div class="hero-tag">EDUCATION · NOT ADVICE · FOR LEARNING ONLY</div>
+    <h1 class="hero-title">
+      THE MARKET<br/><span class="hero-accent">NEVER SLEEPS.</span><br/>DO YOU?
+    </h1>
+    <p class="hero-sub">From zero to institutional-grade thinking. 12 phases, 50+ chapters, real data, no fluff. The academy built for those who refuse to be retail.</p>
+    <div class="hero-cta-row">
+      <button class="btn-primary" onclick="scrollToSection('learn')">START LEARNING →</button>
+      <button class="btn-ghost" onclick="scrollToSection('markets')">LIVE MARKETS</button>
+    </div>
+    <div class="hero-stats">
+      <div class="h-stat"><span class="h-stat-num" id="hStat1">12</span><span class="h-stat-label">Phases</span></div>
+      <div class="h-stat"><span class="h-stat-num" id="hStat2">50+</span><span class="h-stat-label">Chapters</span></div>
+      <div class="h-stat"><span class="h-stat-num" id="hStat3">∞</span><span class="h-stat-label">XP to Earn</span></div>
+      <div class="h-stat"><span class="h-stat-num">LIVE</span><span class="h-stat-label">Market Data</span></div>
+    </div>
+  </div>
+  <div class="hero-ticker">
+    <div class="ticker-inner" id="heroTicker"></div>
+  </div>
+</section>
+
+<!-- LIVE MARKETS -->
+<section class="section" id="markets">
+  <div class="section-header">
+    <div class="section-tag">REAL-TIME DATA</div>
+    <h2 class="section-title">LIVE <span class="accent">MARKETS</span></h2>
+    <p class="section-desc">"Price is what you pay. Value is what you get." — Warren Buffett</p>
+  </div>
+
+  <div class="market-grid" id="marketGrid"></div>
+
+  <!-- FEAR & GREED METER -->
+  <div class="fg-container">
+    <div class="fg-header">
+      <div class="fg-tag">CNN MARKET SENTIMENT</div>
+      <h3 class="fg-title">FEAR & GREED <span class="accent">INDEX</span></h3>
+      <p class="fg-desc">Market sentiment is driven by two emotions. Right now, the market feels...</p>
+    </div>
+    <div class="fg-main">
+      <div class="fg-meter-wrap">
+        <svg class="fg-gauge" viewBox="0 0 300 200" id="fgGauge">
+          <!-- Gradient arcs -->
+          <defs>
+            <linearGradient id="gaugeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" style="stop-color:#ff2020"/>
+              <stop offset="25%" style="stop-color:#ff6b00"/>
+              <stop offset="50%" style="stop-color:#ffd700"/>
+              <stop offset="75%" style="stop-color:#7fff00"/>
+              <stop offset="100%" style="stop-color:#00ff88"/>
+            </linearGradient>
+          </defs>
+          <path d="M 30 160 A 120 120 0 0 1 270 160" fill="none" stroke="#1a1a2e" stroke-width="28"/>
+          <path d="M 30 160 A 120 120 0 0 1 270 160" fill="none" stroke="url(#gaugeGrad)" stroke-width="20" stroke-linecap="round" id="gaugeArc"/>
+          <!-- Needle -->
+          <line id="fgNeedle" x1="150" y1="160" x2="150" y2="60" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="150" cy="160" r="8" fill="#fff"/>
+          <!-- Labels -->
+          <text x="22" y="185" fill="#ff2020" font-size="9" font-family="Space Mono">EXTREME FEAR</text>
+          <text x="228" y="185" fill="#00ff88" font-size="9" font-family="Space Mono">EXTREME GREED</text>
+        </svg>
+        <div class="fg-score-display">
+          <span class="fg-score" id="fgScore">--</span>
+          <span class="fg-label" id="fgLabel">LOADING...</span>
+          <span class="fg-updated" id="fgUpdated">Fetching live data...</span>
+        </div>
+      </div>
+      <div class="fg-info-panel">
+        <div class="fg-indicators" id="fgIndicators">
+          <div class="fg-ind-item">
+            <span class="fg-ind-name">Market Momentum</span>
+            <div class="fg-ind-bar"><div class="fg-ind-fill" id="ind1" style="width:50%"></div></div>
+            <span class="fg-ind-val" id="ind1v">--</span>
+          </div>
+          <div class="fg-ind-item">
+            <span class="fg-ind-name">Stock Price Strength</span>
+            <div class="fg-ind-bar"><div class="fg-ind-fill" id="ind2" style="width:50%"></div></div>
+            <span class="fg-ind-val" id="ind2v">--</span>
+          </div>
+          <div class="fg-ind-item">
+            <span class="fg-ind-name">Safe Haven Demand</span>
+            <div class="fg-ind-bar"><div class="fg-ind-fill" id="ind3" style="width:50%"></div></div>
+            <span class="fg-ind-val" id="ind3v">--</span>
+          </div>
+          <div class="fg-ind-item">
+            <span class="fg-ind-name">Junk Bond Demand</span>
+            <div class="fg-ind-bar"><div class="fg-ind-fill" id="ind4" style="width:50%"></div></div>
+            <span class="fg-ind-val" id="ind4v">--</span>
+          </div>
+          <div class="fg-ind-item">
+            <span class="fg-ind-name">Market Volatility (VIX)</span>
+            <div class="fg-ind-bar"><div class="fg-ind-fill" id="ind5" style="width:50%"></div></div>
+            <span class="fg-ind-val" id="ind5v">--</span>
+          </div>
+        </div>
+        <div class="fg-context" id="fgContext">
+          <p class="fg-context-text">When investors are fearful, markets often represent buying opportunities. When greed dominates, caution is warranted. This index measures 5 key indicators of market sentiment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRADINGVIEW WIDGET -->
+  <div class="tv-section">
+    <div class="tv-header">
+      <h3 class="tv-title">LIVE <span class="accent">CHARTS</span></h3>
+      <div class="tv-controls">
+        <button class="tv-btn active" onclick="switchChart('NASDAQ:AAPL')">AAPL</button>
+        <button class="tv-btn" onclick="switchChart('BINANCE:BTCUSDT')">BTC</button>
+        <button class="tv-btn" onclick="switchChart('OANDA:XAUUSD')">GOLD</button>
+        <button class="tv-btn" onclick="switchChart('NSE:NIFTY')">NIFTY</button>
+        <button class="tv-btn" onclick="switchChart('OANDA:EURUSD')">EUR/USD</button>
+        <button class="tv-predict" onclick="showKalmanPrediction()">⚡ KALMAN PREDICT</button>
+      </div>
+    </div>
+    <div class="tv-widget-wrap" id="tvWidgetWrap">
+      <div id="tradingview_widget"></div>
+    </div>
+    <div class="kalman-panel" id="kalmanPanel" style="display:none">
+      <div class="kalman-header">
+        <span class="kalman-tag">KALMAN FILTER PREDICTION</span>
+        <button onclick="hideKalman()" class="kalman-close">✕</button>
+      </div>
+      <div class="kalman-content" id="kalmanContent"></div>
+    </div>
+  </div>
+
+  <!-- MARKET EVENTS / CRASHES -->
+  <div class="events-section" id="events">
+    <div class="section-header" style="margin-top:0">
+      <div class="section-tag">INSTITUTIONAL MEMORY</div>
+      <h2 class="section-title">WHEN MARKETS <span class="accent">COLLAPSE</span></h2>
+      <p class="section-desc">"The market is a device for transferring money from the impatient to the patient." — Warren Buffett</p>
+    </div>
+    <div class="events-grid" id="eventsGrid"></div>
+  </div>
+</section>
+
+<!-- LEARNING CHAPTERS -->
+<section class="section" id="learn">
+  <div class="section-header">
+    <div class="section-tag">12 PHASES · 50+ CHAPTERS</div>
+    <h2 class="section-title">THE <span class="accent">CURRICULUM</span></h2>
+    <p class="section-desc">"An investment in knowledge pays the best interest." — Benjamin Franklin</p>
+  </div>
+  <div class="progress-overview" id="progressOverview">
+    <div class="prog-bar-wrap">
+      <div class="prog-label">OVERALL PROGRESS</div>
+      <div class="prog-bar"><div class="prog-fill" id="overallFill" style="width:0%"></div></div>
+      <div class="prog-pct" id="overallPct">0%</div>
+    </div>
+    <div class="badges-row" id="badgesRow"></div>
+  </div>
+  <div class="chapters-grid" id="chaptersGrid"></div>
+</section>
+
+<!-- CALCULATORS -->
+<section class="section" id="calculators">
+  <div class="section-header">
+    <div class="section-tag">PRECISION TOOLS</div>
+    <h2 class="section-title">TRADING <span class="accent">CALCULATORS</span></h2>
+    <p class="section-desc">"Risk comes from not knowing what you're doing." — Warren Buffett</p>
+  </div>
+  <div class="calc-tabs">
+    <button class="calc-tab active" onclick="showCalc('position')">Position Size</button>
+    <button class="calc-tab" onclick="showCalc('rr')">Risk/Reward</button>
+    <button class="calc-tab" onclick="showCalc('pip')">Pip Value</button>
+    <button class="calc-tab" onclick="showCalc('compound')">Compound</button>
+    <button class="calc-tab" onclick="showCalc('dcf')">DCF</button>
+    <button class="calc-tab" onclick="showCalc('margin')">Margin</button>
+    <button class="calc-tab" onclick="showCalc('drawdown')">Drawdown</button>
+    <button class="calc-tab" onclick="showCalc('expected')">Expected Value</button>
+  </div>
+  <div class="calc-container" id="calcContainer"></div>
+</section>
+
+<!-- MODAL FOR CHAPTERS -->
+<div class="chapter-modal" id="chapterModal">
+  <div class="modal-backdrop" onclick="closeModal()"></div>
+  <div class="modal-content" id="modalContent"></div>
+</div>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-disclaimer">
+    ⚠️ DISCLAIMER: This platform is strictly for educational purposes only. Nothing here constitutes financial advice, investment recommendations, or trading signals. All market data shown is for learning and illustration. Always do your own research (DYOR) and consult a certified financial advisor before making any investment decisions. Trading involves substantial risk of loss.
+  </div>
+  <div class="footer-brand">APEX<span class="accent">TRADER</span> © 2026 — Built for the relentless.</div>
+</footer>
+
+<!-- SCRIPTS -->
+<script src="https://s3.tradingview.com/tv.js"></script>
+<script src="js/data.js"></script>
+<script src="js/markets.js"></script>
+<script src="js/feargreed.js"></script>
+<script src="js/chapters.js"></script>
+<script src="js/calculators.js"></script>
+<script src="js/gamification.js"></script>
+<script src="js/kalman.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
