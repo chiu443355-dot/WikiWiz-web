@@ -1,13 +1,12 @@
 // WikiWiz — GAMIFICATION.JS
 
-const STATE_KEY = 'apex_trader_state_v2';
+const STATE_KEY = 'wikiwiz_state_v3';
 
 function getState() {
   try {
-    return JSON.parse(localStorage.getItem(STATE_KEY)) || {
-      xp: 0, completed: [], calcsUsed: [], earnedBadges: [], rank: 0
-    };
-  } catch { return { xp: 0, completed: [], calcsUsed: [], earnedBadges: [], rank: 0 }; }
+    const s = JSON.parse(localStorage.getItem(STATE_KEY));
+    return s || { xp:0, completed:[], calcsUsed:[], earnedBadges:[], rank:0 };
+  } catch { return { xp:0, completed:[], calcsUsed:[], earnedBadges:[], rank:0 }; }
 }
 
 function saveState(state) {
@@ -15,55 +14,45 @@ function saveState(state) {
 }
 
 function updateXPDisplay(totalXP, newXP) {
-  const xpEl = document.getElementById('xpDisplay');
-  if (xpEl) xpEl.textContent = totalXP.toLocaleString() + ' XP';
-
-  // XP animation
-  const toast = document.createElement('div');
-  toast.className = 'xp-toast';
-  toast.textContent = `⚡ +${newXP} XP EARNED!`;
-  document.body.appendChild(toast);
-  setTimeout(() => toast.remove(), 3000);
-
-  // Update rank
+  const el = document.getElementById('xpDisplay');
+  if (el) el.textContent = totalXP.toLocaleString('en-IN') + ' XP';
+  if (newXP > 0) {
+    const toast = document.createElement('div');
+    toast.className = 'xp-toast';
+    toast.textContent = `⚡ +${newXP} XP EARNED!`;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3000);
+  }
   updateRank(totalXP);
   updateProgress();
 }
 
-function awardXP(amount, message) {
+function awardXP(amount, msg) {
   const state = getState();
-  state.xp += amount;
+  state.xp = (state.xp || 0) + amount;
   saveState(state);
   updateXPDisplay(state.xp, amount);
 }
 
 function updateRank(xp) {
-  const rankEl = document.getElementById('navRank');
-  if (!rankEl) return;
-
-  let currentRank = RANKS[0];
-  for (const rank of RANKS) {
-    if (xp >= rank.minXP) currentRank = rank;
-    else break;
-  }
-  rankEl.textContent = currentRank.name;
+  const el = document.getElementById('navRank');
+  if (!el) return;
+  let rank = RANKS[0];
+  for (const r of RANKS) { if (xp >= r.minXP) rank = r; else break; }
+  el.textContent = rank.name;
 }
 
 function checkBadges(state) {
   const completed = state.completed || [];
   const xp = state.xp || 0;
-  const calcsUsed = state.calcsUsed || [];
-
+  const calcsUsed = Array.isArray(state.calcsUsed) ? state.calcsUsed : [];
   BADGES.forEach(badge => {
-    if (state.earnedBadges?.includes(badge.id)) return;
-
+    if ((state.earnedBadges || []).includes(badge.id)) return;
     let earned = false;
     if (badge.xpReq && xp >= badge.xpReq) earned = true;
     if (badge.chapReq && completed.length >= badge.chapReq) earned = true;
     if (badge.calcReq && calcsUsed.length >= badge.calcReq) earned = true;
     if (badge.phaseReq === 'risk' && completed.includes('position-sizing')) earned = true;
-    if (badge.id === 'apex_trader' && completed.length >= 30) earned = true;
-
     if (earned) {
       state.earnedBadges = state.earnedBadges || [];
       state.earnedBadges.push(badge.id);
@@ -77,11 +66,7 @@ function checkBadges(state) {
 function showBadgeToast(badge) {
   const toast = document.createElement('div');
   toast.className = 'badge-toast';
-  toast.innerHTML = `
-    <div class="badge-toast-title">🏆 BADGE UNLOCKED!</div>
-    <div class="badge-toast-name">${badge.icon} ${badge.name}</div>
-    <div style="font-size:0.65rem;color:var(--text2);margin-top:0.25rem">${badge.desc}</div>
-  `;
+  toast.innerHTML = `<div class="badge-toast-title">🏆 BADGE UNLOCKED!</div><div class="badge-toast-name">${badge.icon} ${badge.name}</div><div style="font-size:0.6rem;color:var(--text2);margin-top:0.2rem">${badge.desc}</div>`;
   document.body.appendChild(toast);
   setTimeout(() => toast.remove(), 4000);
 }
@@ -89,13 +74,10 @@ function showBadgeToast(badge) {
 function renderBadges() {
   const row = document.getElementById('badgesRow');
   if (!row) return;
-  const state = getState();
-  const earned = state.earnedBadges || [];
-
+  const earned = getState().earnedBadges || [];
   row.innerHTML = BADGES.map(b => `
     <div class="badge ${earned.includes(b.id) ? 'earned' : ''}" title="${b.desc}">
-      <span class="badge-icon">${b.icon}</span>
-      <span>${b.name}</span>
+      <span>${b.icon}</span><span>${b.name}</span>
     </div>
   `).join('');
 }
@@ -105,7 +87,6 @@ function updateProgress() {
   const total = ALL_CHAPTERS.length;
   const done = (state.completed || []).length;
   const pct = Math.round((done / total) * 100);
-
   const fill = document.getElementById('overallFill');
   const pctEl = document.getElementById('overallPct');
   if (fill) fill.style.width = pct + '%';
@@ -114,5 +95,5 @@ function updateProgress() {
 
 function scrollToSection(id) {
   const el = document.getElementById(id);
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
 }
